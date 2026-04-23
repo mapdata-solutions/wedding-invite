@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Jagadesh & Jahnavi – Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:#fdfbf8;
+    color:#2c2a27;
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    min-height:100vh;
+  }
+
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:3rem 2rem 6rem;
+    overflow:hidden;
+  }
+
+  .floral-top{
+    position:absolute;
+    top:0; left:0; right:0;
+    width:100%;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .hero-content{
+    position:relative;
+    z-index:1;
+    margin-top:120px;
+  }
+
+  .ornament{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:14px;
+    letter-spacing:0.25em;
+    color:#7a5f8a;
+    text-transform:uppercase;
+    margin-bottom:1.5rem;
+    opacity:0;
+    animation:fadeUp 1s ease 0.2s forwards;
+  }
+
+  .names{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(3.2rem,9vw,6rem);
+    font-weight:300;
+    line-height:1;
+    color:#2c2a27;
+    opacity:0;
+    animation:fadeUp 1s ease 0.5s forwards;
+  }
+  .names em{
+    display:block;
+    font-style:italic;
+    font-size:0.48em;
+    color:#9b7daa;
+    margin:0.4rem 0;
+  }
+
+  .divider{
+    width:80px;
+    height:1px;
+    background:linear-gradient(90deg,transparent,#b89fc8,transparent);
+    margin:2rem auto;
+    opacity:0;
+    animation:fadeUp 1s ease 0.8s forwards;
+  }
+
+  .date-block{
+    opacity:0;
+    animation:fadeUp 1s ease 1s forwards;
+  }
+  .date-main{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.6rem,4vw,2.5rem);
+    font-weight:300;
+    color:#2c2a27;
+    letter-spacing:0.05em;
+  }
+  .date-sub{
+    font-size:11px;
+    letter-spacing:0.3em;
+    color:#9b7daa;
+    text-transform:uppercase;
+    margin-top:0.5rem;
+  }
+
+  .scroll-hint{
+    position:absolute;
+    bottom:2.5rem;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    opacity:0;
+    animation:fadeUp 1s ease 1.5s forwards;
+    cursor:pointer;
+    color:#9b7daa;
+    font-size:10px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    z-index:1;
+  }
+  .scroll-line{
+    width:1px;
+    height:40px;
+    background:linear-gradient(180deg,#9b7daa,transparent);
+    animation:scrollPulse 2s ease-in-out infinite;
+  }
+
+  section{
+    max-width:680px;
+    margin:0 auto;
+    padding:5rem 2rem;
+  }
+
+  .section-label{
+    font-size:11px;
+    letter-spacing:0.35em;
+    color:#9b7daa;
+    text-transform:uppercase;
+    margin-bottom:2rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+  }
+  .section-label::before,.section-label::after{
+    content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,transparent,#d4b8e0);
+  }
+  .section-label::after{background:linear-gradient(90deg,#d4b8e0,transparent);}
+
+  .event-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2rem;
+  }
+  @media(max-width:500px){.event-grid{grid-template-columns:1fr;}}
+
+  .event-card{
+    border:1px solid #e8daf0;
+    padding:2rem 1.5rem;
+    border-radius:2px;
+    position:relative;
+    background:#fff;
+  }
+  .event-card::before{
+    content:'';
+    position:absolute;
+    top:6px;left:6px;right:-6px;bottom:-6px;
+    border:1px solid #e8daf0;
+    border-radius:2px;
+    z-index:-1;
+  }
+  .event-type{
+    font-size:10px;letter-spacing:0.3em;color:#9b7daa;
+    text-transform:uppercase;margin-bottom:1rem;
+  }
+  .event-name{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.8rem;font-weight:300;margin-bottom:1rem;line-height:1.2;
+  }
+  .event-detail{font-size:13px;color:#5a5550;line-height:1.8;}
+  .event-detail strong{color:#2c2a27;font-weight:400;display:block;margin-bottom:0.2rem;}
+
+  .photo-section{padding:0 2rem 5rem;max-width:680px;margin:0 auto;}
+  .photo-grid{display:grid;grid-template-columns:3fr 2fr;gap:1rem;}
+  .photo-frame{overflow:hidden;border-radius:2px;position:relative;}
+  .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;filter:sepia(10%) brightness(0.96);transition:filter 0.4s;}
+  .photo-frame img:hover{filter:sepia(0%) brightness(1);}
+  .photo-placeholder{
+    width:100%;height:360px;
+    background:linear-gradient(135deg,#f5eef8,#ede0f5);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:0.5rem;color:#b090c0;
+  }
+  .photo-placeholder svg{opacity:0.5;}
+  .photo-placeholder span{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;}
+
+  .map-section{padding:0 2rem 5rem;max-width:680px;margin:0 auto;}
+  .map-header{margin-bottom:1.5rem;}
+  .venue-name{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;margin-bottom:0.3rem;}
+  .venue-address{font-size:13px;color:#5a5550;letter-spacing:0.05em;}
+  .map-embed{width:100%;height:300px;border:1px solid #e8daf0;border-radius:2px;overflow:hidden;}
+  .map-embed iframe{width:100%;height:100%;border:none;}
+  .directions-btn{
+    display:inline-block;margin-top:1rem;font-size:11px;letter-spacing:0.25em;
+    text-transform:uppercase;color:#9b7daa;text-decoration:none;
+    border-bottom:1px solid #d4b8e0;padding-bottom:2px;transition:color 0.2s;
+  }
+  .directions-btn:hover{color:#6a3d8a;}
+
+  .footer-section{text-align:center;padding:4rem 2rem 0;position:relative;overflow:hidden;}
+  .footer-names{
+    font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-style:italic;
+    font-weight:300;color:#9b7daa;margin-bottom:1rem;position:relative;z-index:1;
+  }
+  .footer-msg{
+    font-size:12px;letter-spacing:0.2em;color:#b090c0;
+    text-transform:uppercase;position:relative;z-index:1;padding-bottom:2rem;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes scrollPulse{
+    0%,100%{opacity:1;}50%{opacity:0.3;}
+  }
+
+  /* ADDITION: countdown and music styles */
+  /* .countdown{
+    margin-top:1.5rem;
+    font-size:12px;
+    letter-spacing:0.25em;
+    color:#9b7daa;
+    text-transform:uppercase;
+  } */
+  .countdown{
+    font-size:14px;
+    margin-top:1.2rem;
+    letter-spacing:0.2em;
+    color:#7a5f8a;
+    font-weight:400;
+  }   
+
+  .countdown-label{
+    margin-top:0.5rem;
+    font-size:11px;
+    color:#b090c0;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+  }
+
+  .music-btn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:none;
+    background:#9b7daa;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    z-index:999;
+  }
+
+  .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+</head>
+<body>
+
+<!-- MUSIC (added) -->
+<audio id="bg-music" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/14/audio_0b2d6f.mp3" type="audio/mpeg">
+</audio>
+<button id="music-btn" class="music-btn" aria-pressed="false" aria-label="Play background music" title="Play background music">🎶</button>
+<span id="music-status" class="sr-only" aria-hidden="true">Music paused</span>
+
+<div class="hero">
+
+  <!-- Wisteria top floral SVG -->
+  <svg class="floral-top" viewBox="0 0 1400 430" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMin slice">
+    <defs>
+      <radialGradient id="pg1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#c084d8" stop-opacity="0.92"/>
+        <stop offset="100%" stop-color="#7b2fa0" stop-opacity="0.7"/>
+      </radialGradient>
+      <radialGradient id="pg2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#dda0e8" stop-opacity="0.88"/>
+        <stop offset="100%" stop-color="#b060c8" stop-opacity="0.65"/>
+      </radialGradient>
+      <radialGradient id="pg3" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f0c0f0" stop-opacity="0.82"/>
+        <stop offset="100%" stop-color="#d080d0" stop-opacity="0.58"/>
+      </radialGradient>
+      <radialGradient id="gg1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#7ab87a" stop-opacity="0.88"/>
+        <stop offset="100%" stop-color="#3a7a3a" stop-opacity="0.65"/>
+      </radialGradient>
+      <radialGradient id="gg2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#a8c8a0" stop-opacity="0.78"/>
+        <stop offset="100%" stop-color="#5a8850" stop-opacity="0.55"/>
+      </radialGradient>
+      <linearGradient id="fadeW" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="60%" stop-color="#fdfbf8" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#fdfbf8" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+
+    <!-- MAIN BRANCHES -->
+    <path d="M-30,0 Q200,45 400,85 Q560,115 680,170 Q720,195 730,240" stroke="#5a3a20" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <path d="M1430,0 Q1200,50 1000,92 Q840,125 720,172 Q685,197 675,242" stroke="#5a3a20" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <!-- sub-branches -->
+    <path d="M200,45 Q210,100 195,185 Q183,255 205,305" stroke="#6b4c30" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <path d="M400,85 Q415,145 398,225 Q385,295 410,350" stroke="#6b4c30" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <path d="M560,115 Q572,170 556,245 Q543,312 568,360" stroke="#6b4c30" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path d="M1200,50 Q1188,108 1205,188 Q1218,258 1195,308" stroke="#6b4c30" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <path d="M1000,92 Q988,150 1005,228 Q1018,298 993,352" stroke="#6b4c30" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+    <path d="M840,125 Q828,178 845,252 Q858,318 833,364" stroke="#6b4c30" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- ═══ LEFT LEAVES ═══ -->
+    <ellipse cx="60"  cy="52"  rx="62" ry="24" fill="url(#gg1)" transform="rotate(-32,60,52)"   opacity="0.88"/>
+    <ellipse cx="165" cy="42"  rx="68" ry="21" fill="url(#gg2)" transform="rotate(-18,165,42)"  opacity="0.82"/>
+    <ellipse cx="260" cy="68"  rx="58" ry="22" fill="url(#gg1)" transform="rotate(-42,260,68)"  opacity="0.86"/>
+    <ellipse cx="28"  cy="95"  rx="50" ry="18" fill="url(#gg2)" transform="rotate(-22,28,95)"   opacity="0.75"/>
+    <ellipse cx="350" cy="94"  rx="54" ry="20" fill="url(#gg1)" transform="rotate(-28,350,94)"  opacity="0.84"/>
+    <ellipse cx="460" cy="110" rx="56" ry="20" fill="url(#gg2)" transform="rotate(-38,460,110)" opacity="0.78"/>
+    <ellipse cx="140" cy="105" rx="44" ry="16" fill="url(#gg1)" transform="rotate(-12,140,105)" opacity="0.72"/>
+    <ellipse cx="520" cy="130" rx="46" ry="17" fill="url(#gg2)" transform="rotate(-30,520,130)" opacity="0.72"/>
+
+    <!-- ═══ LEFT WISTERIA CLUSTERS ═══ -->
+    <!-- L1 @ x=90 -->
+    <ellipse cx="90"  cy="145" rx="15" ry="26" fill="url(#pg1)" opacity="0.92"/>
+    <ellipse cx="77"  cy="172" rx="14" ry="23" fill="url(#pg2)" opacity="0.87"/>
+    <ellipse cx="103" cy="175" rx="13" ry="21" fill="url(#pg1)" opacity="0.82"/>
+    <ellipse cx="88"  cy="198" rx="12" ry="19" fill="url(#pg3)" opacity="0.77"/>
+    <ellipse cx="105" cy="202" rx="11" ry="17" fill="url(#pg2)" opacity="0.72"/>
+    <ellipse cx="72"  cy="200" rx="11" ry="16" fill="url(#pg1)" opacity="0.67"/>
+    <ellipse cx="90"  cy="222" rx="10" ry="14" fill="url(#pg3)" opacity="0.55"/>
+    <ellipse cx="90"  cy="240" rx="8"  ry="11" fill="url(#pg2)" opacity="0.4"/>
+    <!-- L2 @ x=200 -->
+    <ellipse cx="200" cy="158" rx="16" ry="28" fill="url(#pg2)" opacity="0.9"/>
+    <ellipse cx="186" cy="187" rx="14" ry="24" fill="url(#pg1)" opacity="0.85"/>
+    <ellipse cx="214" cy="190" rx="13" ry="22" fill="url(#pg3)" opacity="0.8"/>
+    <ellipse cx="199" cy="213" rx="12" ry="20" fill="url(#pg2)" opacity="0.75"/>
+    <ellipse cx="216" cy="217" rx="11" ry="18" fill="url(#pg1)" opacity="0.7"/>
+    <ellipse cx="182" cy="215" rx="11" ry="17" fill="url(#pg3)" opacity="0.65"/>
+    <ellipse cx="200" cy="237" rx="10" ry="14" fill="url(#pg2)" opacity="0.52"/>
+    <!-- L3 @ x=310 -->
+    <ellipse cx="310" cy="170" rx="15" ry="26" fill="url(#pg3)" opacity="0.88"/>
+    <ellipse cx="297" cy="197" rx="14" ry="23" fill="url(#pg1)" opacity="0.83"/>
+    <ellipse cx="323" cy="200" rx="13" ry="21" fill="url(#pg2)" opacity="0.78"/>
+    <ellipse cx="309" cy="222" rx="12" ry="19" fill="url(#pg3)" opacity="0.73"/>
+    <ellipse cx="325" cy="226" rx="11" ry="17" fill="url(#pg1)" opacity="0.67"/>
+    <ellipse cx="294" cy="224" rx="10" ry="15" fill="url(#pg2)" opacity="0.6"/>
+    <ellipse cx="310" cy="244" rx="9"  ry="13" fill="url(#pg3)" opacity="0.48"/>
+    <!-- L4 @ x=415 -->
+    <ellipse cx="415" cy="178" rx="15" ry="25" fill="url(#pg1)" opacity="0.86"/>
+    <ellipse cx="402" cy="204" rx="13" ry="22" fill="url(#pg2)" opacity="0.81"/>
+    <ellipse cx="428" cy="207" rx="12" ry="20" fill="url(#pg3)" opacity="0.76"/>
+    <ellipse cx="414" cy="228" rx="11" ry="18" fill="url(#pg1)" opacity="0.7"/>
+    <ellipse cx="430" cy="232" rx="10" ry="16" fill="url(#pg2)" opacity="0.63"/>
+    <ellipse cx="399" cy="230" rx="10" ry="14" fill="url(#pg3)" opacity="0.57"/>
+    <!-- L5 @ x=510 -->
+    <ellipse cx="510" cy="188" rx="14" ry="24" fill="url(#pg2)" opacity="0.83"/>
+    <ellipse cx="497" cy="213" rx="13" ry="21" fill="url(#pg1)" opacity="0.78"/>
+    <ellipse cx="523" cy="216" rx="12" ry="19" fill="url(#pg3)" opacity="0.73"/>
+    <ellipse cx="509" cy="236" rx="11" ry="17" fill="url(#pg2)" opacity="0.67"/>
+    <ellipse cx="525" cy="240" rx="10" ry="15" fill="url(#pg1)" opacity="0.6"/>
+
+    <!-- ═══ RIGHT LEAVES ═══ -->
+    <ellipse cx="1340" cy="50"  rx="62" ry="24" fill="url(#gg1)" transform="rotate(32,1340,50)"   opacity="0.88"/>
+    <ellipse cx="1235" cy="40"  rx="68" ry="21" fill="url(#gg2)" transform="rotate(18,1235,40)"   opacity="0.82"/>
+    <ellipse cx="1140" cy="66"  rx="58" ry="22" fill="url(#gg1)" transform="rotate(42,1140,66)"   opacity="0.86"/>
+    <ellipse cx="1372" cy="93"  rx="50" ry="18" fill="url(#gg2)" transform="rotate(22,1372,93)"   opacity="0.75"/>
+    <ellipse cx="1050" cy="92"  rx="54" ry="20" fill="url(#gg1)" transform="rotate(28,1050,92)"   opacity="0.84"/>
+    <ellipse cx="940"  cy="108" rx="56" ry="20" fill="url(#gg2)" transform="rotate(38,940,108)"   opacity="0.78"/>
+    <ellipse cx="1260" cy="103" rx="44" ry="16" fill="url(#gg1)" transform="rotate(12,1260,103)"  opacity="0.72"/>
+    <ellipse cx="880"  cy="128" rx="46" ry="17" fill="url(#gg2)" transform="rotate(30,880,128)"   opacity="0.72"/>
+
+    <!-- ═══ RIGHT WISTERIA CLUSTERS ═══ -->
+    <!-- R1 @ x=1310 -->
+    <ellipse cx="1310" cy="143" rx="15" ry="26" fill="url(#pg1)" opacity="0.92"/>
+    <ellipse cx="1297" cy="170" rx="14" ry="23" fill="url(#pg2)" opacity="0.87"/>
+    <ellipse cx="1323" cy="173" rx="13" ry="21" fill="url(#pg3)" opacity="0.82"/>
+    <ellipse cx="1308" cy="196" rx="12" ry="19" fill="url(#pg1)" opacity="0.77"/>
+    <ellipse cx="1325" cy="200" rx="11" ry="17" fill="url(#pg2)" opacity="0.72"/>
+    <ellipse cx="1292" cy="198" rx="11" ry="16" fill="url(#pg3)" opacity="0.67"/>
+    <ellipse cx="1310" cy="220" rx="10" ry="14" fill="url(#pg1)" opacity="0.55"/>
+    <!-- R2 @ x=1200 -->
+    <ellipse cx="1200" cy="156" rx="16" ry="28" fill="url(#pg2)" opacity="0.9"/>
+    <ellipse cx="1186" cy="185" rx="14" ry="24" fill="url(#pg3)" opacity="0.85"/>
+    <ellipse cx="1214" cy="188" rx="13" ry="22" fill="url(#pg1)" opacity="0.8"/>
+    <ellipse cx="1199" cy="211" rx="12" ry="20" fill="url(#pg2)" opacity="0.75"/>
+    <ellipse cx="1216" cy="215" rx="11" ry="18" fill="url(#pg3)" opacity="0.7"/>
+    <ellipse cx="1182" cy="213" rx="11" ry="17" fill="url(#pg1)" opacity="0.65"/>
+    <ellipse cx="1200" cy="235" rx="10" ry="14" fill="url(#pg2)" opacity="0.52"/>
+    <!-- R3 @ x=1090 -->
+    <ellipse cx="1090" cy="168" rx="15" ry="26" fill="url(#pg3)" opacity="0.88"/>
+    <ellipse cx="1077" cy="195" rx="14" ry="23" fill="url(#pg2)" opacity="0.83"/>
+    <ellipse cx="1103" cy="198" rx="13" ry="21" fill="url(#pg1)" opacity="0.78"/>
+    <ellipse cx="1089" cy="220" rx="12" ry="19" fill="url(#pg3)" opacity="0.73"/>
+    <ellipse cx="1105" cy="224" rx="11" ry="17" fill="url(#pg2)" opacity="0.67"/>
+    <ellipse cx="1074" cy="222" rx="10" ry="15" fill="url(#pg1)" opacity="0.6"/>
+    <!-- R4 @ x=985 -->
+    <ellipse cx="985"  cy="176" rx="15" ry="25" fill="url(#pg1)" opacity="0.86"/>
+    <ellipse cx="972"  cy="202" rx="13" ry="22" fill="url(#pg3)" opacity="0.81"/>
+    <ellipse cx="998"  cy="205" rx="12" ry="20" fill="url(#pg2)" opacity="0.76"/>
+    <ellipse cx="984"  cy="226" rx="11" ry="18" fill="url(#pg1)" opacity="0.7"/>
+    <ellipse cx="1000" cy="230" rx="10" ry="16" fill="url(#pg3)" opacity="0.63"/>
+    <!-- R5 @ x=880 -->
+    <ellipse cx="880"  cy="186" rx="14" ry="24" fill="url(#pg2)" opacity="0.83"/>
+    <ellipse cx="867"  cy="211" rx="13" ry="21" fill="url(#pg3)" opacity="0.78"/>
+    <ellipse cx="893"  cy="214" rx="12" ry="19" fill="url(#pg1)" opacity="0.73"/>
+    <ellipse cx="879"  cy="234" rx="11" ry="17" fill="url(#pg2)" opacity="0.67"/>
+
+    <!-- CENTRE drooping -->
+    <ellipse cx="702" cy="210" rx="13" ry="20" fill="url(#pg3)" opacity="0.58"/>
+    <ellipse cx="690" cy="232" rx="11" ry="18" fill="url(#pg2)" opacity="0.52"/>
+    <ellipse cx="714" cy="235" rx="10" ry="16" fill="url(#pg1)" opacity="0.47"/>
+    <ellipse cx="702" cy="253" rx="9"  ry="13" fill="url(#pg3)" opacity="0.38"/>
+
+    <!-- GOLD DOTS -->
+    <circle cx="55"   cy="138" r="3"   fill="#d4a830" opacity="0.72"/>
+    <circle cx="148"  cy="118" r="2.5" fill="#d4a830" opacity="0.66"/>
+    <circle cx="238"  cy="132" r="3"   fill="#d4a830" opacity="0.72"/>
+    <circle cx="328"  cy="148" r="2.5" fill="#d4a830" opacity="0.65"/>
+    <circle cx="422"  cy="158" r="3"   fill="#d4a830" opacity="0.68"/>
+    <circle cx="545"  cy="172" r="2.5" fill="#d4a830" opacity="0.62"/>
+    <circle cx="80"   cy="188" r="2"   fill="#d4a830" opacity="0.55"/>
+    <circle cx="178"  cy="205" r="2"   fill="#d4a830" opacity="0.5"/>
+    <circle cx="370"  cy="192" r="2"   fill="#d4a830" opacity="0.5"/>
+    <circle cx="1345" cy="136" r="3"   fill="#d4a830" opacity="0.72"/>
+    <circle cx="1252" cy="116" r="2.5" fill="#d4a830" opacity="0.66"/>
+    <circle cx="1162" cy="130" r="3"   fill="#d4a830" opacity="0.72"/>
+    <circle cx="1072" cy="146" r="2.5" fill="#d4a830" opacity="0.65"/>
+    <circle cx="978"  cy="156" r="3"   fill="#d4a830" opacity="0.68"/>
+    <circle cx="855"  cy="170" r="2.5" fill="#d4a830" opacity="0.62"/>
+    <circle cx="1320" cy="186" r="2"   fill="#d4a830" opacity="0.55"/>
+    <circle cx="1222" cy="202" r="2"   fill="#d4a830" opacity="0.5"/>
+    <circle cx="1030" cy="190" r="2"   fill="#d4a830" opacity="0.5"/>
+
+    <!-- fade to white -->
+    <rect x="0" y="290" width="1400" height="140" fill="url(#fadeW)"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="ornament">Together with their families</div>
+    <div class="names">
+      Jagadesh
+      <em>&amp;</em>
+      Jahnavi
+    </div>
+    <div class="divider"></div>
+    <div class="date-block">
+      <div class="date-main">8th May 2026</div>
+      <div class="date-sub">Request the honour of your presence</div>
+    </div>
+    <div class="countdown-label">Countdown to the wedding</div>
+    <div id="countdown" class="countdown" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <!-- <div class="scroll-hint" onclick="document.getElementById('events').scrollIntoView({behavior:'smooth'})">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div> -->
+</div>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="section-label">Ceremony Details</div>
+  <div class="event-grid">
+    <div class="event-card">
+      <div class="event-type">The Wedding</div>
+      <div class="event-name">Sacred Ceremony</div>
+      <div class="event-detail">
+        <strong>Friday, 8th May 2026</strong>
+        Auspicious Muhurtham<br/>
+        Morning – Please check with family<br/><br/>
+        <strong>Venue</strong>
+        Raghavendra Function Hall<br/>
+        Pedaballi
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-type">Celebration</div>
+      <div class="event-name">Wedding Reception</div>
+      <div class="event-detail">
+        <strong>Friday, 8th May 2026</strong>
+        Reception &amp; Grand Feast<br/>
+        Evening Onwards<br/><br/>
+        <strong>Venue</strong>
+        Raghavendra Function Hall<br/>
+        Pedaballi
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="photo-section">
+  <div class="section-label">The Couple</div>
+  <div class="photo-grid">
+    
+    <div class="photo-frame">
+      <img src="/Users/apple/Downloads/M0400139.JPG" style="width:100%; height:360px; object-fit:cover; display:block;"/>
+    </div>
+
+    <div class="photo-frame">
+      <img src="/Users/apple/Downloads/M0400152.JPG" style="width:100%; height:360px; object-fit:cover; display:block;"/>
+    </div>
+
+    <div class="photo-frame">
+      <img src="/Users/apple/Downloads/M0400207.JPG" style="width:100%; height:360px; object-fit:cover; display:block;"/>
+    </div>
+
+    <div class="photo-frame">
+      <img src="/Users/apple/Downloads/M0400537.JPG" style="width:100%; height:360px; object-fit:cover; display:block;"/>
+    </div>
+
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="map-section">
+  <div class="section-label">Find Us</div>
+  <div class="map-header">
+    <div class="venue-name">Raghavendra Function Hall</div>
+    <div class="venue-address">Pedaballi, Andhra Pradesh</div>
+  </div>
+  <div class="map-embed">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13486.720910982718!2d77.76679836642973!3d14.055514181695102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb17b066f6a1f9d%3A0x37a8dbeb30eb928d!2sRaghavendra%20kalyana%20mandapam!5e1!3m2!1sen!2sin!4v1776916170910!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <a class="directions-btn" href="https://maps.app.goo.gl/r8meoFF2J7CrGqa6A" target="_blank">
+    Get Directions →
+  </a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-section">
+  <div class="footer-names">Jagadesh &amp; Jahnavi</div>
+  <div class="footer-msg">We can't wait to celebrate with you</div>
+
+  <!-- Upward-facing wisteria (same clusters, flipped) -->
+  <svg viewBox="0 0 1400 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;transform:scaleY(-1);margin-top:1rem;" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <radialGradient id="fpg1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#c084d8" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#7b2fa0" stop-opacity="0.55"/>
+      </radialGradient>
+      <radialGradient id="fpg2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#dda0e8" stop-opacity="0.75"/>
+        <stop offset="100%" stop-color="#b060c8" stop-opacity="0.5"/>
+      </radialGradient>
+      <radialGradient id="fpg3" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f0c0f0" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#d080d0" stop-opacity="0.45"/>
+      </radialGradient>
+      <radialGradient id="fgg1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#7ab87a" stop-opacity="0.82"/>
+        <stop offset="100%" stop-color="#3a7a3a" stop-opacity="0.58"/>
+      </radialGradient>
+      <linearGradient id="ffW" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="55%" stop-color="#fdfbf8" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#fdfbf8" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <path d="M-30,0 Q200,40 430,78 Q600,108 720,158" stroke="#5a3a20" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.65"/>
+    <path d="M1430,0 Q1200,45 970,82 Q800,112 680,162" stroke="#5a3a20" stroke-width="6.5" fill="none" stroke-linecap="round" opacity="0.65"/>
+    <!-- leaves -->
+    <ellipse cx="80"   cy="48"  rx="58" ry="22" fill="url(#fgg1)" transform="rotate(-28,80,48)"   opacity="0.82"/>
+    <ellipse cx="230"  cy="62"  rx="62" ry="20" fill="url(#fgg1)" transform="rotate(-38,230,62)"  opacity="0.78"/>
+    <ellipse cx="400"  cy="78"  rx="52" ry="19" fill="url(#fgg1)" transform="rotate(-22,400,78)"  opacity="0.8"/>
+    <ellipse cx="1320" cy="46"  rx="58" ry="22" fill="url(#fgg1)" transform="rotate(28,1320,46)"  opacity="0.82"/>
+    <ellipse cx="1170" cy="60"  rx="62" ry="20" fill="url(#fgg1)" transform="rotate(38,1170,60)"  opacity="0.78"/>
+    <ellipse cx="1000" cy="76"  rx="52" ry="19" fill="url(#fgg1)" transform="rotate(22,1000,76)"  opacity="0.8"/>
+    <!-- clusters left -->
+    <ellipse cx="110"  cy="115" rx="14" ry="23" fill="url(#fpg1)" opacity="0.85"/>
+    <ellipse cx="97"   cy="139" rx="13" ry="21" fill="url(#fpg2)" opacity="0.8"/>
+    <ellipse cx="123"  cy="142" rx="12" ry="19" fill="url(#fpg3)" opacity="0.75"/>
+    <ellipse cx="110"  cy="162" rx="11" ry="17" fill="url(#fpg1)" opacity="0.68"/>
+    <ellipse cx="126"  cy="166" rx="10" ry="15" fill="url(#fpg2)" opacity="0.6"/>
+    <ellipse cx="260"  cy="125" rx="15" ry="24" fill="url(#fpg2)" opacity="0.82"/>
+    <ellipse cx="246"  cy="150" rx="13" ry="22" fill="url(#fpg1)" opacity="0.77"/>
+    <ellipse cx="274"  cy="153" rx="12" ry="20" fill="url(#fpg3)" opacity="0.72"/>
+    <ellipse cx="260"  cy="173" rx="11" ry="18" fill="url(#fpg2)" opacity="0.65"/>
+    <ellipse cx="410"  cy="132" rx="14" ry="23" fill="url(#fpg3)" opacity="0.8"/>
+    <ellipse cx="397"  cy="156" rx="13" ry="21" fill="url(#fpg2)" opacity="0.75"/>
+    <ellipse cx="423"  cy="159" rx="12" ry="19" fill="url(#fpg1)" opacity="0.7"/>
+    <ellipse cx="410"  cy="178" rx="11" ry="16" fill="url(#fpg3)" opacity="0.62"/>
+    <!-- clusters right -->
+    <ellipse cx="1290" cy="113" rx="14" ry="23" fill="url(#fpg1)" opacity="0.85"/>
+    <ellipse cx="1277" cy="137" rx="13" ry="21" fill="url(#fpg2)" opacity="0.8"/>
+    <ellipse cx="1303" cy="140" rx="12" ry="19" fill="url(#fpg3)" opacity="0.75"/>
+    <ellipse cx="1290" cy="160" rx="11" ry="17" fill="url(#fpg1)" opacity="0.68"/>
+    <ellipse cx="1140" cy="123" rx="15" ry="24" fill="url(#fpg2)" opacity="0.82"/>
+    <ellipse cx="1126" cy="148" rx="13" ry="22" fill="url(#fpg3)" opacity="0.77"/>
+    <ellipse cx="1154" cy="151" rx="12" ry="20" fill="url(#fpg1)" opacity="0.72"/>
+    <ellipse cx="1140" cy="171" rx="11" ry="18" fill="url(#fpg2)" opacity="0.65"/>
+    <ellipse cx="990"  cy="130" rx="14" ry="23" fill="url(#fpg3)" opacity="0.8"/>
+    <ellipse cx="977"  cy="154" rx="13" ry="21" fill="url(#fpg1)" opacity="0.75"/>
+    <ellipse cx="1003" cy="157" rx="12" ry="19" fill="url(#fpg2)" opacity="0.7"/>
+    <!-- gold dots -->
+    <circle cx="68"   cy="102" r="2.5" fill="#d4a830" opacity="0.65"/>
+    <circle cx="185"  cy="112" r="2"   fill="#d4a830" opacity="0.6"/>
+    <circle cx="335"  cy="120" r="2.5" fill="#d4a830" opacity="0.65"/>
+    <circle cx="1332" cy="100" r="2.5" fill="#d4a830" opacity="0.65"/>
+    <circle cx="1215" cy="110" r="2"   fill="#d4a830" opacity="0.6"/>
+    <circle cx="1065" cy="118" r="2.5" fill="#d4a830" opacity="0.65"/>
+    <rect x="0" y="200" width="1400" height="100" fill="url(#ffW)"/>
+  </svg>
+</div>
+
+<!-- JS: countdown + music control -->
+<script>
+// COUNTDOWN
+const weddingDate = new Date("May 8, 2026 00:00:00").getTime();
+const countdownEl = document.getElementById('countdown');
+function pad(n){ return String(n).padStart(2,'0'); }
+function updateCountdown(){
+  if (!countdownEl) return;
+  const now = Date.now();
+  const diff = weddingDate - now;
+  if (isNaN(weddingDate)) { countdownEl.textContent = ''; return; }
+  if (diff <= 0){
+    countdownEl.textContent = 'Wedding Day — See you there!';
+    if (window._weddingInterval) clearInterval(window._weddingInterval);
+    return;
+  }
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  // show days · hh:mm
+  countdownEl.textContent = `${days} DAYS · ${pad(hours)}:${pad(minutes)}`;
+}
+window._weddingInterval = setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// MUSIC
+const music = document.getElementById('bg-music');
+const btn = document.getElementById('music-btn');
+const status = document.getElementById('music-status');
+function setPlayingState(isPlaying){
+  if (!btn) return;
+  btn.setAttribute('aria-pressed', String(!!isPlaying));
+  btn.title = isPlaying ? 'Pause background music' : 'Play background music';
+  btn.textContent = isPlaying ? '🔊' : '🎶';
+  if (status) status.textContent = isPlaying ? 'Music playing' : 'Music paused';
+}
+if (btn){
+  btn.addEventListener('click', async ()=>{
+    if (!music) return;
+    if (music.paused){
+      try{ await music.play(); setPlayingState(true); }
+      catch(e){ btn.title = 'Enable audio in your browser to play music'; setPlayingState(false); }
+    } else { music.pause(); setPlayingState(false); }
+  });
+}
+setPlayingState(false);
+</script>
+
+</body>
+</html>
