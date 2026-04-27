@@ -393,11 +393,184 @@
     .footer-msg{ font-size:9px; }
   }
 
-  /* Map section padding on desktop */
-  @media(min-width:601px){
-    .map-section{ padding:0 1.5rem 3rem; }
-    .photo-section{ padding:0 1.5rem 3rem; }
-    section{ padding:3rem 1.5rem; }
+  /* ════ CINEMATIC ANIMATIONS ════ */
+
+  /* Hero elements already use CSS animation via fadeUp keyframe */
+  /* Override existing hero animations to be more cinematic */
+  .ornament{
+    animation:cin-fade-down 1s cubic-bezier(0.22,1,0.36,1) 0.3s both;
+  }
+  .names{
+    animation:cin-fade-up 1.1s cubic-bezier(0.22,1,0.36,1) 0.6s both;
+  }
+  .divider{
+    animation:cin-scale-x 0.9s cubic-bezier(0.22,1,0.36,1) 1s both;
+  }
+  .date-block{
+    animation:cin-fade-up 1s cubic-bezier(0.22,1,0.36,1) 1.1s both;
+  }
+
+  /* Base state for scroll-reveal elements */
+  .reveal{
+    opacity:0;
+    transform:translateY(36px);
+    transition:opacity 0.85s cubic-bezier(0.22,1,0.36,1),
+                transform 0.85s cubic-bezier(0.22,1,0.36,1);
+    will-change:opacity,transform;
+  }
+  .reveal.reveal-left{
+    transform:translateX(-40px);
+  }
+  .reveal.reveal-right{
+    transform:translateX(40px);
+  }
+  .reveal.reveal-scale{
+    transform:scale(0.92) translateY(20px);
+  }
+  .reveal.is-visible{
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  /* Staggered children */
+  .reveal-stagger > *{
+    opacity:0;
+    transform:translateY(30px);
+    transition:opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                transform 0.75s cubic-bezier(0.22,1,0.36,1);
+    will-change:opacity,transform;
+  }
+  .reveal-stagger.is-visible > *:nth-child(1){ opacity:1; transform:none; transition-delay:0s; }
+  .reveal-stagger.is-visible > *:nth-child(2){ opacity:1; transform:none; transition-delay:0.12s; }
+  .reveal-stagger.is-visible > *:nth-child(3){ opacity:1; transform:none; transition-delay:0.24s; }
+  .reveal-stagger.is-visible > *:nth-child(4){ opacity:1; transform:none; transition-delay:0.36s; }
+  .reveal-stagger.is-visible > *:nth-child(5){ opacity:1; transform:none; transition-delay:0.48s; }
+  .reveal-stagger.is-visible > *:nth-child(6){ opacity:1; transform:none; transition-delay:0.60s; }
+  .reveal-stagger.is-visible > *:nth-child(7){ opacity:1; transform:none; transition-delay:0.72s; }
+
+  /* Photo frame hover lift */
+  .photo-frame{
+    transition:transform 0.4s cubic-bezier(0.22,1,0.36,1),
+               box-shadow 0.4s ease;
+  }
+  .photo-frame:hover{
+    transform:translateY(-4px) scale(1.01);
+    box-shadow:0 12px 30px rgba(155,125,170,0.22);
+  }
+
+  /* Event card hover lift */
+  .event-card{
+    transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),
+               box-shadow 0.35s ease;
+  }
+  .event-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 28px rgba(155,125,170,0.18);
+  }
+
+  /* Countdown tile pulse on load */
+  .ct-tile{
+    animation:cin-tile-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .ct-tile:nth-child(1){ animation-delay:0.1s; }
+  .ct-tile:nth-child(3){ animation-delay:0.22s; }
+  .ct-tile:nth-child(5){ animation-delay:0.34s; }
+  .ct-tile:nth-child(7){ animation-delay:0.46s; }
+
+  /* Section label line-draw effect */
+  .section-label{
+    overflow:hidden;
+  }
+  .section-label::before,
+  .section-label::after{
+    transition:width 1s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  /* Keyframes */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes cin-fade-up{
+    from{opacity:0;transform:translateY(32px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes cin-fade-down{
+    from{opacity:0;transform:translateY(-20px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes cin-scale-x{
+    from{opacity:0;transform:scaleX(0);}
+    to{opacity:1;transform:scaleX(1);}
+  }
+  @keyframes cin-tile-pop{
+    from{opacity:0;transform:scale(0.7) translateY(16px);}
+    to{opacity:1;transform:scale(1) translateY(0);}
+  }
+  @keyframes scrollPulse{
+    0%,100%{opacity:1;}50%{opacity:0.3;}
+  }
+
+  /* Respect reduced motion */
+  @media(prefers-reduced-motion:reduce){
+    .reveal,.reveal-stagger>*,.ct-tile,
+    .ornament,.names,.divider,.date-block{
+      animation:none !important;
+      transition:none !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
+  }
+  /* ════ IMAGE OPTIMIZATION ════ */
+
+  /* Shimmer skeleton while image loads */
+  .photo-frame{
+    position:relative;
+    background:#f0e8f5;
+    overflow:hidden;
+  }
+  .photo-frame::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+      90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.45) 50%,
+      rgba(255,255,255,0) 100%
+    );
+    background-size:200% 100%;
+    animation:shimmer 1.6s infinite linear;
+    z-index:1;
+    pointer-events:none;
+  }
+  /* Hide shimmer once image loaded */
+  .photo-frame.loaded::before{
+    display:none;
+  }
+
+  /* Blur-up: start blurry + transparent, reveal sharp */
+  .photo-frame img{
+    filter:blur(8px) sepia(10%) brightness(0.96);
+    opacity:0;
+    transition:filter 0.7s ease, opacity 0.5s ease;
+    width:100%;
+    height:clamp(130px,38vw,260px);
+    object-fit:cover;
+    display:block;
+    will-change:filter,opacity;
+  }
+  .photo-frame.loaded img{
+    filter:blur(0) sepia(10%) brightness(0.96);
+    opacity:1;
+  }
+  .photo-frame.loaded img:hover{
+    filter:blur(0) sepia(0%) brightness(1);
+  }
+
+  @keyframes shimmer{
+    0%  { background-position:-200% 0; }
+    100%{ background-position: 200% 0; }
   }
 </style>
 </head>
@@ -600,7 +773,7 @@
 
 <!-- COUNTDOWN SECTION -->
 <div class="countdown-section">
-  <div class="countdown-label-top">Countdown to the Wedding</div>
+  <div class="countdown-label-top reveal">Countdown to the Wedding</div>
   <div class="countdown-tiles" id="countdown" aria-live="polite" aria-atomic="true">
     <div class="ct-tile"><span class="ct-num" id="ct-days">00</span><span class="ct-unit">Days</span></div>
     <div class="ct-sep">:</div>
@@ -614,11 +787,11 @@
 
 <!-- EVENTS -->
 <section id="events">
-  <div class="section-label">Ceremony Details</div>
+  <div class="section-label reveal">Ceremony Details</div>
   <div class="event-grid">
-    <div class="event-card">
+    <div class="event-card reveal reveal-left">
       <div class="event-type">The Wedding</div>
-      <div class="event-name">Sacred Ceremony (Muhurtham)</div>
+      <div class="event-name">Sacred Ceremony</div>
       <div class="event-detail">
         <strong>Friday, 8th May 2026</strong>
         Auspicious Muhurtham<br/>
@@ -628,7 +801,7 @@
         Pedaballi
       </div>
     </div>
-    <div class="event-card">
+    <div class="event-card reveal reveal-right">
       <div class="event-type">Celebration</div>
       <div class="event-name">Wedding Reception</div>
       <div class="event-detail">
@@ -644,23 +817,35 @@
 </section>
 
 <div class="photo-section">
-  <div class="section-label">The Couple</div>
-  <div class="photo-grid">
+  <div class="section-label reveal">The Couple</div>
+  <div class="photo-grid reveal-stagger">
     
     <div class="photo-frame">
-      <img src="img/M0400139.jpeg" alt="Jagadesh and Jahnavi"/>
+      <img src="img/M0400139.jpeg" alt="Jagadesh and Jahnavi"/>           alt="Jagadesh and Jahnavi"
+           loading="lazy"
+           decoding="async"
+           width="800" height="600"/>
     </div>
 
     <div class="photo-frame">
-      <img src="img/M0400238.jpeg" alt="Jagadesh and Jahnavi"/>
+      <img src="img/M0400238.jpeg" alt="Jagadesh and Jahnavi"/>           alt="Jagadesh and Jahnavi"
+           loading="lazy"
+           decoding="async"
+           width="800" height="600"/>
     </div>
 
     <div class="photo-frame">
-      <img src="img/M0400606.jpeg" alt="Jagadesh and Jahnavi"/>
+      <img src="img/M0400606.jpeg" alt="Jagadesh and Jahnavi"/>           alt="Jagadesh and Jahnavi"
+           loading="lazy"
+           decoding="async"
+           width="800" height="600"/>
     </div>
 
     <div class="photo-frame">
-      <img src="img/M0400529.jpeg" alt="Jagadesh and Jahnavi"/>
+      <img src="img/M0400529.jpeg" alt="Jagadesh and Jahnavi"/>           alt="Jagadesh and Jahnavi"
+           loading="lazy"
+           decoding="async"
+           width="800" height="600"/>
     </div>
 
   </div>
@@ -668,12 +853,12 @@
 
 <!-- MAP -->
 <div class="map-section">
-  <div class="section-label">Find Us</div>
-  <div class="map-header">
+  <div class="section-label reveal">Find Us</div>
+  <div class="map-header reveal">
     <div class="venue-name">Raghavendra Function Hall</div>
     <div class="venue-address">Pedaballi, Andhra Pradesh</div>
   </div>
-  <div class="map-embed">
+  <div class="map-embed reveal reveal-scale">
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13486.720910982718!2d77.76679836642973!3d14.055514181695102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb17b066f6a1f9d%3A0x37a8dbeb30eb928d!2sRaghavendra%20kalyana%20mandapam!5e1!3m2!1sen!2sin!4v1776916170910!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
   <a class="directions-btn" href="https://maps.app.goo.gl/r8meoFF2J7CrGqa6A" target="_blank">
@@ -683,8 +868,8 @@
 
 <!-- FOOTER -->
 <div class="footer-section">
-  <div class="footer-names">Jagadesh &amp; Jahnavi</div>
-  <div class="footer-msg">We can't wait to celebrate with you</div>
+  <div class="footer-names reveal">Jagadesh &amp; Jahnavi</div>
+  <div class="footer-msg reveal">We can't wait to celebrate with you</div>
 
   <!-- Upward-facing wisteria (same clusters, flipped) -->
   <svg viewBox="0 0 1400 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;transform:scaleY(-1);margin-top:1rem;" preserveAspectRatio="xMidYMax slice">
@@ -779,7 +964,121 @@ function updateCountdown(){
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-// MUSIC
+// ════ IMAGE BLUR-UP REVEAL ════
+document.querySelectorAll('.photo-frame img').forEach(img => {
+  const frame = img.closest('.photo-frame');
+  function onLoad(){
+    // Small RAF delay so the blur-to-sharp transition is visible
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        frame.classList.add('loaded');
+      });
+    });
+  }
+  if(img.complete && img.naturalWidth > 0){
+    onLoad();
+  } else {
+    img.addEventListener('load', onLoad, { once: true });
+    img.addEventListener('error', () => {
+      // Even on error, remove shimmer so layout doesn't hang
+      frame.classList.add('loaded');
+    }, { once: true });
+  }
+});
+
+// ════ CINEMATIC SCROLL REVEAL ════
+(function(){
+  // Also handle countdown label tile animation trigger
+  const countdownSection = document.querySelector('.countdown-section');
+
+  const observerOpts = {
+    root: null,
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  };
+
+  // Single elements: .reveal
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        // Small delay based on position in DOM for cascading feel
+        const el = entry.target;
+        const delay = el.dataset.delay || 0;
+        setTimeout(() => {
+          el.classList.add('is-visible');
+        }, delay);
+        revealObserver.unobserve(el);
+      }
+    });
+  }, observerOpts);
+
+  // Stagger parent: .reveal-stagger
+  const staggerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        staggerObserver.unobserve(entry.target);
+      }
+    });
+  }, { ...observerOpts, threshold: 0.08 });
+
+  // Assign cascade delays to sibling .reveal elements
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    // Give each reveal element a slight stagger based on siblings
+    const siblings = el.parentElement.querySelectorAll('.reveal');
+    const sibIdx = Array.from(siblings).indexOf(el);
+    el.dataset.delay = sibIdx * 100;
+    revealObserver.observe(el);
+  });
+
+  document.querySelectorAll('.reveal-stagger').forEach(el => {
+    staggerObserver.observe(el);
+  });
+
+  // Countdown tiles: pop in when section enters view
+  const ctTiles = document.querySelectorAll('.ct-tile');
+  const ctSeps  = document.querySelectorAll('.ct-sep');
+  if(countdownSection && ctTiles.length){
+    // Start tiles invisible
+    ctTiles.forEach(t => {
+      t.style.opacity = '0';
+      t.style.transform = 'scale(0.7) translateY(16px)';
+      t.style.transition = 'opacity 0.5s cubic-bezier(0.34,1.56,0.64,1), transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+    });
+    ctSeps.forEach(s => {
+      s.style.opacity = '0';
+      s.style.transition = 'opacity 0.4s ease';
+    });
+
+    const ctObserver = new IntersectionObserver((entries) => {
+      if(entries[0].isIntersecting){
+        ctTiles.forEach((t, i) => {
+          setTimeout(() => {
+            t.style.opacity = '1';
+            t.style.transform = 'scale(1) translateY(0)';
+          }, i * 120);
+        });
+        ctSeps.forEach((s, i) => {
+          setTimeout(() => { s.style.opacity = '0.8'; }, i * 120 + 80);
+        });
+        ctObserver.unobserve(entries[0].target);
+      }
+    }, { threshold: 0.2 });
+    ctObserver.observe(countdownSection);
+  }
+
+  // Floral SVG: fade in gently on load
+  const floralSvg = document.querySelector('.floral-top');
+  if(floralSvg){
+    floralSvg.style.opacity = '0';
+    floralSvg.style.transform = 'translateY(-18px)';
+    floralSvg.style.transition = 'opacity 1.4s ease 0.1s, transform 1.4s cubic-bezier(0.22,1,0.36,1) 0.1s';
+    requestAnimationFrame(() => {
+      floralSvg.style.opacity = '1';
+      floralSvg.style.transform = 'translateY(0)';
+    });
+  }
+})();
 const music = document.getElementById('bg-music');
 const btn = document.getElementById('music-btn');
 const status = document.getElementById('music-status');
